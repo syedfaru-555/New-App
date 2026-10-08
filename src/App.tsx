@@ -22,6 +22,15 @@ import { AuthModal } from './components/AuthModal';
 const MainAppContent: React.FC = () => {
   const { activeTab, activePlayback, toastMessage } = useApp();
 
+  // Full-screen video player takes over the mobile viewport
+  if (activePlayback) {
+    return (
+      <MobileFrame>
+        <VideoPlayer />
+      </MobileFrame>
+    );
+  }
+
   return (
     <MobileFrame>
       {/* Top Mobile App Header */}
@@ -43,7 +52,6 @@ const MainAppContent: React.FC = () => {
 
       {/* Modals & Overlays */}
       <ContentDetailsModal />
-      {activePlayback && <VideoPlayer />}
       <ProfileSwitchModal />
       <SubscriptionModal />
       <PaymentModal />
