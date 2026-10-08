@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   ChevronRight,
   ShieldAlert,
-  Play
+  Play,
+  Download
 } from 'lucide-react';
 
 export const ProfileScreen: React.FC = () => {
@@ -31,7 +32,8 @@ export const ProfileScreen: React.FC = () => {
     startPlayback,
     setShowAuthModal,
     showToast,
-    resetAllData
+    resetAllData,
+    setActiveTab
   } = useApp();
 
   const [showSupportModal, setShowSupportModal] = useState(false);
@@ -246,6 +248,17 @@ export const ProfileScreen: React.FC = () => {
 
       {/* Support & Account Actions */}
       <div className="p-4 rounded-xl bg-zinc-900 border border-white/10 space-y-2">
+        <button
+          onClick={() => setActiveTab('downloads')}
+          className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/5 text-zinc-200 transition-colors text-left"
+        >
+          <div className="flex items-center gap-2.5">
+            <Download className="w-4 h-4 text-rose-500" />
+            <span className="text-xs font-semibold">Offline Downloads & Storage Limits</span>
+          </div>
+          <ChevronRight className="w-4 h-4 text-zinc-500" />
+        </button>
+
         <button
           onClick={() => setShowSupportModal(true)}
           className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/5 text-zinc-200 transition-colors text-left"

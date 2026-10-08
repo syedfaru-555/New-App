@@ -5,6 +5,8 @@ import {
   UserAccount,
   WatchProgress,
   DownloadedItem,
+  DownloadSettings,
+  DownloadQuality,
   NotificationItem,
   SubscriptionTier,
   Episode
@@ -18,8 +20,8 @@ import {
 
 interface AppContextType {
   // Navigation & UI state
-  activeTab: 'home' | 'movies' | 'series' | 'search' | 'mylist' | 'profile';
-  setActiveTab: (tab: 'home' | 'movies' | 'series' | 'search' | 'mylist' | 'profile') => void;
+  activeTab: 'home' | 'movies' | 'series' | 'search' | 'downloads' | 'mylist' | 'profile';
+  setActiveTab: (tab: 'home' | 'movies' | 'series' | 'search' | 'downloads' | 'mylist' | 'profile') => void;
   activeGenre: string;
   setActiveGenre: (genre: string) => void;
   isMobileFrame: boolean;
@@ -49,11 +51,32 @@ interface AppContextType {
   toggleMyList: (contentId: string) => void;
   isInMyList: (contentId: string) => boolean;
 
-  // Offline Downloads (Simulated)
+  // Offline Downloads & Storage Limit Logic
   downloadedItems: DownloadedItem[];
-  downloadContent: (item: ContentItem, episode?: Episode) => void;
+  downloadSettings: DownloadSettings;
+  updateDownloadSettings: (settings: Partial<DownloadSettings>) => void;
+  simulatedNetwork: 'wifi' | 'cellular';
+  setSimulatedNetwork: (net: 'wifi' | 'cellular') => void;
+  toggleSimulatedNetwork: () => void;
+  downloadContent: (item: ContentItem, episode?: Episode, quality?: DownloadQuality, allowCellular?: boolean) => { success: boolean; reason?: string };
   removeDownload: (downloadId: string) => void;
+  pauseDownload: (downloadId: string) => void;
+  resumeDownload: (downloadId: string) => void;
+  cancelDownload: (downloadId: string) => void;
+  deleteWatchedDownloads: () => number;
+  deleteAllDownloads: () => void;
   isDownloaded: (contentId: string, episodeId?: string) => boolean;
+  getDownloadItem: (contentId: string, episodeId?: string) => DownloadedItem | undefined;
+  totalDownloadedMb: number;
+  storageLimitMb: number;
+  availableStorageMb: number;
+  storagePercentUsed: number;
+
+  // Storage and Network alerts
+  cellularDownloadPrompt: { item: ContentItem; episode?: Episode; quality?: DownloadQuality } | null;
+  setCellularDownloadPrompt: (data: { item: ContentItem; episode?: Episode; quality?: DownloadQuality } | null) => void;
+  storageLimitPrompt: { neededMb: number; itemTitle: string } | null;
+  setStorageLimitPrompt: (data: { neededMb: number; itemTitle: string } | null) => void;
 
   // Profiles & User
   user: UserAccount;
@@ -107,13 +130,15 @@ const STORAGE_KEYS = {
   MY_LIST: 'vela_mylist_v1',
   WATCH_PROGRESS: 'vela_progress_v1',
   DOWNLOADS: 'vela_downloads_v1',
+  DOWNLOAD_SETTINGS: 'vela_dl_settings_v1',
+  SIM_NETWORK: 'vela_network_mode_v1',
   NOTIFICATIONS: 'vela_notifs_v1',
   IS_MOBILE_FRAME: 'vela_mobile_frame_v1'
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Navigation & Frame
-  const [activeTab, setActiveTab] = useState<'home' | 'movies' | 'series' | 'search' | 'mylist' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'movies' | 'series' | 'search' | 'downloads' | 'mylist' | 'profile'>('home');
   const [activeGenre, setActiveGenre] = useState<string>('All');
   const [isMobileFrame, setIsMobileFrame] = useState<boolean>(() => {
     // Default to mobile frame on wider screens so user gets the mobile app experience right away
@@ -181,7 +206,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
-  // Downloads
+  // Download Settings
+  const [downloadSettings, setDownloadSettings] = useState<DownloadSettings>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.DOWNLOAD_SETTINGS);
+      return saved ? JSON.parse(saved) : {
+        wifiOnly: true,
+        smartDownloads: true,
+        storageLimitGb: 16,
+        quality: 'high'
+      };
+    } catch {
+      return {
+        wifiOnly: true,
+        smartDownloads: true,
+        storageLimitGb: 16,
+        quality: 'high'
+      };
+    }
+  });
+
+  // Simulated Network mode (Wi-Fi vs Cellular 5G)
+  const [simulatedNetwork, setSimulatedNetwork] = useState<'wifi' | 'cellular'>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.SIM_NETWORK);
+      return (saved as 'wifi' | 'cellular') || 'wifi';
+    } catch {
+      return 'wifi';
+    }
+  });
+
+  // Downloads with rich status
   const [downloadedItems, setDownloadedItems] = useState<DownloadedItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.DOWNLOADS);
@@ -194,13 +249,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           fileSizeMb: 1480,
           downloadedAt: '2026-03-02',
           posterUrl: '/src/assets/images/vela_hero_chronos_deep_1791479592223.jpg',
-          duration: '2h 28m'
+          duration: '2h 28m',
+          quality: 'high',
+          status: 'completed',
+          progress: 100,
+          downloadSpeedMb: 24.5,
+          watched: false
         }
       ];
     } catch {
       return [];
     }
   });
+
+  // Cellular prompt modal and Storage prompt modal states
+  const [cellularDownloadPrompt, setCellularDownloadPrompt] = useState<{
+    item: ContentItem;
+    episode?: Episode;
+    quality?: DownloadQuality;
+  } | null>(null);
+
+  const [storageLimitPrompt, setStorageLimitPrompt] = useState<{
+    neededMb: number;
+    itemTitle: string;
+  } | null>(null);
 
   // Notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
@@ -243,6 +315,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.DOWNLOADS, JSON.stringify(downloadedItems));
   }, [downloadedItems]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.DOWNLOAD_SETTINGS, JSON.stringify(downloadSettings));
+  }, [downloadSettings]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SIM_NETWORK, simulatedNetwork);
+  }, [simulatedNetwork]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
@@ -369,36 +449,205 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const isInMyList = (contentId: string) => myListIds.includes(contentId);
 
-  // Downloads
-  const downloadContent = (item: ContentItem, episode?: Episode) => {
-    const downloadId = episode ? `dl-${item.id}-${episode.id}` : `dl-${item.id}`;
-    if (downloadedItems.some((d) => d.id === downloadId)) {
-      showToast(`"${episode ? episode.title : item.title}" is already downloaded`);
+  // Storage Limit Math & Metrics
+  const totalDownloadedMb = downloadedItems.reduce((acc, curr) => acc + curr.fileSizeMb, 0);
+  const storageLimitMb = downloadSettings.storageLimitGb * 1024;
+  const availableStorageMb = Math.max(0, storageLimitMb - totalDownloadedMb);
+  const storagePercentUsed = storageLimitMb > 0
+    ? Math.min(100, Math.round((totalDownloadedMb / storageLimitMb) * 100))
+    : 0;
+
+  // Toggle Network simulation
+  const toggleSimulatedNetwork = () => {
+    const next = simulatedNetwork === 'wifi' ? 'cellular' : 'wifi';
+    setSimulatedNetwork(next);
+    showToast(`Network switched to ${next === 'wifi' ? 'Home_5G Wi-Fi' : 'Cellular Mobile 5G'}`);
+  };
+
+  const updateDownloadSettings = (settings: Partial<DownloadSettings>) => {
+    setDownloadSettings((prev) => ({ ...prev, ...settings }));
+    showToast('Download settings updated');
+  };
+
+  // Estimate file size in MB based on quality and duration
+  const calculateEstimatedSizeMb = (isMovie: boolean, quality: DownloadQuality): number => {
+    switch (quality) {
+      case 'standard':
+        return isMovie ? 520 : 240;
+      case 'ultra':
+        return isMovie ? 3400 : 1350;
+      case 'high':
+      default:
+        return isMovie ? 1480 : 580;
+    }
+  };
+
+  // Active Download Simulation Loop
+  useEffect(() => {
+    const hasDownloading = downloadedItems.some((d) => d.status === 'downloading');
+    if (!hasDownloading) return;
+
+    // Check if network is cellular and wifiOnly is turned on: auto-pause downloading items
+    if (simulatedNetwork === 'cellular' && downloadSettings.wifiOnly) {
+      setDownloadedItems((prev) =>
+        prev.map((d) => (d.status === 'downloading' ? { ...d, status: 'paused' } : d))
+      );
+      showToast('Downloads paused: Connected to Cellular and Wi-Fi Only is enabled.');
       return;
     }
+
+    const interval = setInterval(() => {
+      setDownloadedItems((prev) =>
+        prev.map((d) => {
+          if (d.status !== 'downloading') return d;
+          const step = simulatedNetwork === 'wifi' ? 18 : 8; // Wi-Fi is faster than cellular
+          const newProgress = Math.min(100, d.progress + step);
+          const isDone = newProgress >= 100;
+
+          if (isDone) {
+            // Trigger completion toast
+            setTimeout(() => {
+              showToast(`"${d.title}" download complete! Ready for offline viewing.`);
+            }, 100);
+          }
+
+          return {
+            ...d,
+            progress: newProgress,
+            status: isDone ? 'completed' : 'downloading',
+            downloadSpeedMb: simulatedNetwork === 'wifi' ? 24.8 : 7.4
+          };
+        })
+      );
+    }, 450);
+
+    return () => clearInterval(interval);
+  }, [downloadedItems, simulatedNetwork, downloadSettings.wifiOnly]);
+
+  // Offline Downloads Manager
+  const downloadContent = (
+    item: ContentItem,
+    episode?: Episode,
+    qualityParam?: DownloadQuality,
+    allowCellular: boolean = false
+  ): { success: boolean; reason?: string } => {
+    const downloadId = episode ? `dl-${item.id}-${episode.id}` : `dl-${item.id}`;
+    const targetQuality = qualityParam || downloadSettings.quality;
+
+    // 1. Check if already downloaded or in queue
+    const existing = downloadedItems.find((d) => d.id === downloadId);
+    if (existing) {
+      if (existing.status === 'completed') {
+        showToast(`"${episode ? episode.title : item.title}" is already downloaded`);
+        return { success: false, reason: 'already_downloaded' };
+      }
+      if (existing.status === 'downloading') {
+        showToast('Download is currently in progress');
+        return { success: false, reason: 'in_progress' };
+      }
+    }
+
+    // 2. Wi-Fi Only Network Check
+    if (simulatedNetwork === 'cellular' && downloadSettings.wifiOnly && !allowCellular) {
+      setCellularDownloadPrompt({ item, episode, quality: targetQuality });
+      showToast('Wi-Fi Only enabled. Connect to Wi-Fi or approve cellular data.');
+      return { success: false, reason: 'cellular_blocked' };
+    }
+
+    // 3. Storage Limit Quota Check
+    const estimatedSizeMb = calculateEstimatedSizeMb(item.type === 'movie', targetQuality);
+    if (totalDownloadedMb + estimatedSizeMb > storageLimitMb) {
+      setStorageLimitPrompt({
+        neededMb: estimatedSizeMb,
+        itemTitle: episode ? `${item.title}: ${episode.title}` : item.title
+      });
+      showToast(`Storage limit reached (${downloadSettings.storageLimitGb} GB). Free up space to continue.`);
+      return { success: false, reason: 'storage_full' };
+    }
+
+    // 4. Create and start download
+    const title = episode ? `${item.title}: ${episode.title}` : item.title;
     const newItem: DownloadedItem = {
       id: downloadId,
       contentId: item.id,
       episodeId: episode?.id,
-      title: episode ? `${item.title}: ${episode.title}` : item.title,
+      title,
       type: item.type,
-      fileSizeMb: Math.floor(Math.random() * 800) + 600,
+      fileSizeMb: estimatedSizeMb,
       downloadedAt: new Date().toISOString().split('T')[0],
       posterUrl: episode ? episode.thumbnail : item.posterUrl,
-      duration: episode ? episode.duration : item.duration
+      duration: episode ? episode.duration : item.duration,
+      quality: targetQuality,
+      status: 'downloading',
+      progress: 6,
+      downloadSpeedMb: simulatedNetwork === 'wifi' ? 24.5 : 7.2,
+      watched: false
     };
-    setDownloadedItems((prev) => [newItem, ...prev]);
-    showToast(`Downloaded "${newItem.title}" for offline playback`);
+
+    setDownloadedItems((prev) => [newItem, ...prev.filter((d) => d.id !== downloadId)]);
+    showToast(`Downloading "${title}" (${estimatedSizeMb} MB)...`);
+    return { success: true };
   };
 
   const removeDownload = (downloadId: string) => {
     setDownloadedItems((prev) => prev.filter((d) => d.id !== downloadId));
-    showToast('Download removed from storage');
+    showToast('Download deleted from storage');
+  };
+
+  const pauseDownload = (downloadId: string) => {
+    setDownloadedItems((prev) =>
+      prev.map((d) => (d.id === downloadId ? { ...d, status: 'paused' } : d))
+    );
+    showToast('Download paused');
+  };
+
+  const resumeDownload = (downloadId: string) => {
+    if (simulatedNetwork === 'cellular' && downloadSettings.wifiOnly) {
+      showToast('Cannot resume: on Cellular data with Wi-Fi Only enabled.');
+      return;
+    }
+    setDownloadedItems((prev) =>
+      prev.map((d) => (d.id === downloadId ? { ...d, status: 'downloading' } : d))
+    );
+    showToast('Download resumed');
+  };
+
+  const cancelDownload = (downloadId: string) => {
+    setDownloadedItems((prev) => prev.filter((d) => d.id !== downloadId));
+    showToast('Download cancelled');
+  };
+
+  const deleteWatchedDownloads = (): number => {
+    const watchedIds = downloadedItems.filter((d) => {
+      const progress = getProgressForContent(d.contentId);
+      return d.watched || (progress && progress.completed);
+    });
+
+    if (watchedIds.length === 0) {
+      showToast('No watched downloads found to clean up');
+      return 0;
+    }
+
+    const freedMb = watchedIds.reduce((sum, item) => sum + item.fileSizeMb, 0);
+    setDownloadedItems((prev) => prev.filter((d) => !watchedIds.some((w) => w.id === d.id)));
+    showToast(`Freed ${(freedMb / 1024).toFixed(1)} GB by deleting ${watchedIds.length} watched files`);
+    return freedMb;
+  };
+
+  const deleteAllDownloads = () => {
+    const totalFreed = totalDownloadedMb;
+    setDownloadedItems([]);
+    showToast(`Cleared all downloads. Freed ${(totalFreed / 1024).toFixed(1)} GB`);
   };
 
   const isDownloaded = (contentId: string, episodeId?: string) => {
     const id = episodeId ? `dl-${contentId}-${episodeId}` : `dl-${contentId}`;
-    return downloadedItems.some((d) => d.id === id || (d.contentId === contentId && !episodeId));
+    return downloadedItems.some((d) => (d.id === id || (d.contentId === contentId && !episodeId)) && d.status === 'completed');
+  };
+
+  const getDownloadItem = (contentId: string, episodeId?: string) => {
+    const id = episodeId ? `dl-${contentId}-${episodeId}` : `dl-${contentId}`;
+    return downloadedItems.find((d) => d.id === id || (d.contentId === contentId && !episodeId));
   };
 
   // Profile Switching & Management
@@ -546,9 +795,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleMyList,
         isInMyList,
         downloadedItems,
+        downloadSettings,
+        updateDownloadSettings,
+        simulatedNetwork,
+        setSimulatedNetwork,
+        toggleSimulatedNetwork,
         downloadContent,
         removeDownload,
+        pauseDownload,
+        resumeDownload,
+        cancelDownload,
+        deleteWatchedDownloads,
+        deleteAllDownloads,
         isDownloaded,
+        getDownloadItem,
+        totalDownloadedMb,
+        storageLimitMb,
+        availableStorageMb,
+        storagePercentUsed,
+        cellularDownloadPrompt,
+        setCellularDownloadPrompt,
+        storageLimitPrompt,
+        setStorageLimitPrompt,
         user,
         activeProfile,
         switchProfile,

@@ -1,16 +1,23 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Home, Film, Tv, Search, Bookmark, User } from 'lucide-react';
+import { Home, Film, Tv, Download, Search, User } from 'lucide-react';
 
 export const BottomNav: React.FC = () => {
-  const { activeTab, setActiveTab, myListIds } = useApp();
+  const { activeTab, setActiveTab, downloadedItems } = useApp();
+
+  const activeDownloadingCount = downloadedItems.filter((d) => d.status === 'downloading').length;
 
   const navItems = [
     { id: 'home' as const, label: 'Home', icon: Home },
     { id: 'movies' as const, label: 'Movies', icon: Film },
     { id: 'series' as const, label: 'Series', icon: Tv },
+    {
+      id: 'downloads' as const,
+      label: 'Downloads',
+      icon: Download,
+      badge: activeDownloadingCount > 0 ? activeDownloadingCount : (downloadedItems.length > 0 ? downloadedItems.length : undefined)
+    },
     { id: 'search' as const, label: 'Search', icon: Search },
-    { id: 'mylist' as const, label: 'My List', icon: Bookmark, badge: myListIds.length },
     { id: 'profile' as const, label: 'Profile', icon: User }
   ];
 

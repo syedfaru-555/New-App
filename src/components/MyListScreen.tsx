@@ -52,12 +52,8 @@ export const MyListScreen: React.FC = () => {
             <span>My List ({myListIds.length})</span>
           </button>
           <button
-            onClick={() => setActiveLocalTab('downloads')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'downloads'
-                ? 'bg-rose-600 text-white shadow'
-                : 'text-zinc-400 hover:text-zinc-200'
-            }`}
+            onClick={() => setActiveTab('downloads')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition-all"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Downloads ({downloadedItems.length})</span>

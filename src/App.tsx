@@ -8,6 +8,7 @@ import { MoviesScreen } from './components/MoviesScreen';
 import { SeriesScreen } from './components/SeriesScreen';
 import { SearchScreen } from './components/SearchScreen';
 import { MyListScreen } from './components/MyListScreen';
+import { DownloadsScreen } from './components/DownloadsScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ContentDetailsModal } from './components/ContentDetailsModal';
 import { VideoPlayer } from './components/VideoPlayer';
@@ -32,6 +33,7 @@ const MainAppContent: React.FC = () => {
         {activeTab === 'movies' && <MoviesScreen />}
         {activeTab === 'series' && <SeriesScreen />}
         {activeTab === 'search' && <SearchScreen />}
+        {activeTab === 'downloads' && <DownloadsScreen />}
         {activeTab === 'mylist' && <MyListScreen />}
         {activeTab === 'profile' && <ProfileScreen />}
       </main>

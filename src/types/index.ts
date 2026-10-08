@@ -76,6 +76,8 @@ export interface WatchProgress {
   completed: boolean;
 }
 
+export type DownloadQuality = 'standard' | 'high' | 'ultra';
+
 export interface DownloadedItem {
   id: string;
   contentId: string;
@@ -86,6 +88,18 @@ export interface DownloadedItem {
   downloadedAt: string;
   posterUrl: string;
   duration: string;
+  quality: DownloadQuality;
+  status: 'queued' | 'downloading' | 'completed' | 'paused' | 'error';
+  progress: number; // 0 to 100
+  downloadSpeedMb?: number;
+  watched?: boolean;
+}
+
+export interface DownloadSettings {
+  wifiOnly: boolean;
+  smartDownloads: boolean;
+  storageLimitGb: number;
+  quality: DownloadQuality;
 }
 
 export interface SubscriptionTier {

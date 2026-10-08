@@ -26,13 +26,14 @@ export const ContentDetailsModal: React.FC = () => {
     isDownloaded,
     getRecommendations,
     showToast,
-    getProgressForContent
+    getProgressForContent,
+    activePlayback
   } = useApp();
 
   const [activeSeasonIndex, setActiveSeasonIndex] = useState(0);
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
 
-  if (!selectedContent) return null;
+  if (!selectedContent || activePlayback) return null;
 
   const item = selectedContent;
   const inList = isInMyList(item.id);
