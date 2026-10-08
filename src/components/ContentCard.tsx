@@ -8,13 +8,15 @@ interface ContentCardProps {
   rank?: number;
   showProgress?: boolean;
   aspect?: 'portrait' | 'landscape';
+  className?: string;
 }
 
 export const ContentCard: React.FC<ContentCardProps> = ({
   item,
   rank,
   showProgress = true,
-  aspect = 'portrait'
+  aspect = 'portrait',
+  className
 }) => {
   const { setSelectedContent, startPlayback, toggleMyList, isInMyList, getProgressForContent } = useApp();
   const [imgError, setImgError] = useState(false);
@@ -26,31 +28,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
     : 0;
 
   const isLandscape = aspect === 'landscape';
+  const widthClasses = className || (isLandscape ? 'w-56 sm:w-64 md:w-72 shrink-0' : 'w-full min-w-0');
 
   return (
     <div
       onClick={() => setSelectedContent(item)}
-      className="group relative flex-shrink-0 cursor-pointer select-none transition-transform duration-200 active:scale-95"
+      className={`group relative cursor-pointer select-none transition-transform duration-200 active:scale-95 shrink-0 min-w-0 ${widthClasses}`}
     >
-      {/* Top 10 Rank Number Display (if provided) */}
-      {rank !== undefined && (
-        <div className="absolute -left-3 bottom-0 z-20 pointer-events-none">
-          <span
-            className="text-6xl font-black italic tracking-tighter text-transparent"
-            style={{
-              WebkitTextStroke: '2px rgba(255,255,255,0.6)',
-              textShadow: '0 4px 14px rgba(0,0,0,0.9)'
-            }}
-          >
-            {rank}
-          </span>
-        </div>
-      )}
-
       {/* Card Visual Container */}
       <div
-        className={`relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 transition-all duration-300 group-hover:border-rose-500/50 group-hover:shadow-lg group-hover:shadow-rose-950/20 ${
-          isLandscape ? 'w-64 sm:w-72 aspect-video' : 'w-36 sm:w-44 aspect-[2/3]'
+        className={`relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 transition-all duration-300 group-hover:border-rose-500/50 group-hover:shadow-lg group-hover:shadow-rose-950/20 w-full ${
+          isLandscape ? 'aspect-video' : 'aspect-[2/3]'
         }`}
       >
         {!imgError ? (
@@ -70,6 +58,21 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
         {/* Gradient Scrim */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+
+        {/* Top 10 Rank Number Overlay (Bounded to poster, never distorts row) */}
+        {rank !== undefined && (
+          <div className="absolute left-1 bottom-0 z-20 pointer-events-none leading-none">
+            <span
+              className="text-4xl sm:text-5xl font-black italic tracking-tighter text-white select-none leading-none"
+              style={{
+                WebkitTextStroke: '1.5px rgba(244,63,94,0.95)',
+                textShadow: '0 3px 10px rgba(0,0,0,0.95)'
+              }}
+            >
+              {rank}
+            </span>
+          </div>
+        )}
 
         {/* Badges on Top */}
         <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none">
@@ -121,34 +124,25 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
 
       {/* Card Metadata info */}
-      <div className="mt-2 w-full">
-        <h4 className="text-xs sm:text-sm font-semibold text-zinc-100 truncate group-hover:text-rose-400 transition-colors">
+      <div className="mt-1.5 w-full min-w-0 overflow-hidden">
+        <h4 className="text-xs sm:text-sm font-semibold text-zinc-100 truncate group-hover:text-rose-400 transition-colors block w-full min-w-0">
           {item.title}
         </h4>
 
         {/* Clean unboxed metadata with separators */}
-        <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-zinc-400">
-          <span className="flex items-center gap-0.5 text-amber-400 font-semibold">
+        <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-zinc-400 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+          <span className="flex items-center gap-0.5 text-amber-400 font-semibold shrink-0">
             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
             {item.rating.toFixed(1)}
           </span>
-          <span aria-hidden="true" className="text-zinc-600">·</span>
-          <span>{item.year}</span>
-          <span aria-hidden="true" className="text-zinc-600">·</span>
-          <span>{item.genres[0]}</span>
-          <span aria-hidden="true" className="text-zinc-600">·</span>
-          <span>{item.duration}</span>
-        </div>
-
-        {/* Language and maturity rating */}
-        <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-zinc-500">
-          <span>{item.languages[0]}</span>
-          <span aria-hidden="true" className="text-zinc-700">·</span>
-          <span>{item.maturityRating}</span>
-          {showProgress && progressPercent > 0 && (
+          <span aria-hidden="true" className="text-zinc-600 shrink-0">·</span>
+          <span className="shrink-0">{item.year}</span>
+          <span aria-hidden="true" className="text-zinc-600 shrink-0">·</span>
+          <span className="truncate min-w-0">{item.genres[0]}</span>
+          {item.duration && (
             <>
-              <span aria-hidden="true" className="text-zinc-700">·</span>
-              <span className="text-rose-400">{progressPercent}% watched</span>
+              <span aria-hidden="true" className="text-zinc-600 shrink-0">·</span>
+              <span className="shrink-0">{item.duration}</span>
             </>
           )}
         </div>

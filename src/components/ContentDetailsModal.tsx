@@ -84,6 +84,7 @@ export const ContentDetailsModal: React.FC = () => {
                 autoPlay
                 controls
                 playsInline
+                onError={() => setIsPlayingTrailer(false)}
                 className="w-full h-full object-cover"
               />
             ) : (

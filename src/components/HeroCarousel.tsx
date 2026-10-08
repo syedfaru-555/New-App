@@ -60,6 +60,7 @@ export const HeroCarousel: React.FC = () => {
             loop
             muted={isMuted}
             playsInline
+            onError={() => setIsPlayingPreview(false)}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
           />
         )}

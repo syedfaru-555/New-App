@@ -119,13 +119,14 @@ interface AppContextType {
   // Toast feedback
   toastMessage: string | null;
   showToast: (msg: string) => void;
+  playSampleVideo: () => void;
   resetAllData: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  CATALOG: 'vela_catalog_v1',
+  CATALOG: 'vela_catalog_v2',
   USER: 'vela_user_v1',
   MY_LIST: 'vela_mylist_v1',
   WATCH_PROGRESS: 'vela_progress_v1',
@@ -150,13 +151,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return true;
   });
 
+  // Sanitize helper to fix any stale Google Cloud Storage URLs
+  const sanitizeContent = (items: ContentItem[]): ContentItem[] => {
+    return items.map((item) => {
+      let vUrl = item.videoUrl;
+      let tUrl = item.trailerUrl;
+      if (!vUrl || vUrl.includes('commondatastorage.googleapis.com')) {
+        vUrl = item.id.includes('bohr') ? '/videos/classroom.mp4' : '/videos/sample.mp4';
+      }
+      if (!tUrl || tUrl.includes('commondatastorage.googleapis.com')) {
+        tUrl = '/videos/sample.mp4';
+      }
+      const updatedSeasons = item.seasons?.map((s) => ({
+        ...s,
+        episodes: s.episodes.map((ep) => ({
+          ...ep,
+          videoUrl: (!ep.videoUrl || ep.videoUrl.includes('commondatastorage.googleapis.com'))
+            ? (item.id.includes('bohr') ? '/videos/classroom.mp4' : '/videos/sample.mp4')
+            : ep.videoUrl
+        }))
+      }));
+      return {
+        ...item,
+        videoUrl: vUrl,
+        trailerUrl: tUrl,
+        seasons: updatedSeasons
+      };
+    });
+  };
+
   // Catalog
   const [catalog, setCatalog] = useState<ContentItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.CATALOG);
-      return saved ? JSON.parse(saved) : INITIAL_CONTENT;
+      if (saved) {
+        const parsed: ContentItem[] = JSON.parse(saved);
+        const existingIds = new Set(parsed.map((item) => item.id));
+        const missing = INITIAL_CONTENT.filter((item) => !existingIds.has(item.id));
+        return sanitizeContent([...missing, ...parsed]);
+      }
+      return sanitizeContent(INITIAL_CONTENT);
     } catch {
-      return INITIAL_CONTENT;
+      return sanitizeContent(INITIAL_CONTENT);
     }
   });
 
@@ -388,6 +424,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const existing = watchProgress[key] || watchProgress[content.id];
     const initialSeconds = resumeSeconds !== undefined ? resumeSeconds : (existing ? existing.watchedSeconds : 0);
 
+    setSelectedContent(null);
     setActivePlayback({
       content,
       episode,
@@ -397,6 +434,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const stopPlayback = () => {
     setActivePlayback(null);
+  };
+
+  const playSampleVideo = () => {
+    const sample = catalog.find((c) => c.id === 'vela-sample-001') || catalog[0];
+    if (sample) {
+      setSelectedContent(null);
+      startPlayback(sample, undefined, 0);
+      showToast('Playing Vela 4K Official Sample Video');
+    }
   };
 
   const updateWatchProgress = (
@@ -847,6 +893,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleFeaturedContent,
         toastMessage,
         showToast,
+        playSampleVideo,
         resetAllData
       }}
     >

@@ -81,8 +81,8 @@ export const HomeScreen: React.FC = () => {
         <>
           {/* Continue Watching Section (Automatically saves progress and lets users resume) */}
           {continueWatchingList.length > 0 && (
-            <section className="mt-6 px-4">
-              <div className="flex items-baseline justify-between mb-3">
+            <section className="mt-4 sm:mt-5 px-3.5 sm:px-4">
+              <div className="flex items-baseline justify-between mb-2.5">
                 <h3 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
                   <Play className="w-4 h-4 text-rose-500 fill-rose-500" />
                   Continue Watching
@@ -93,7 +93,7 @@ export const HomeScreen: React.FC = () => {
               </div>
 
               <div
-                className="flex items-start gap-3.5 overflow-x-auto scrollbar-none pb-2 scroll-smooth"
+                className="flex items-start gap-2.5 sm:gap-3 overflow-x-auto scrollbar-none pb-2 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {continueWatchingList.map(({ item, progress }) => {
@@ -105,7 +105,7 @@ export const HomeScreen: React.FC = () => {
                     <div
                       key={item.id}
                       onClick={() => startPlayback(item, undefined, progress.watchedSeconds)}
-                      className="group relative flex-shrink-0 cursor-pointer select-none transition-transform active:scale-95 w-56 sm:w-64"
+                      className="group relative flex-shrink-0 cursor-pointer select-none transition-transform active:scale-95 w-48 sm:w-56 min-w-0"
                     >
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-zinc-900 border border-white/10 group-hover:border-rose-500/50 transition-all">
                         <img
@@ -115,8 +115,8 @@ export const HomeScreen: React.FC = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-colors">
-                          <div className="w-10 h-10 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
-                            <Play className="w-5 h-5 fill-white ml-0.5" />
+                          <div className="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+                            <Play className="w-4 h-4 fill-white ml-0.5" />
                           </div>
                         </div>
 
@@ -129,13 +129,13 @@ export const HomeScreen: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="mt-2">
+                      <div className="mt-1.5 min-w-0">
                         <h4 className="text-xs font-bold text-white truncate group-hover:text-rose-400">
                           {item.title}
                         </h4>
                         <div className="flex items-center justify-between text-[11px] text-zinc-400 mt-0.5">
-                          <span>{item.genres[0]}</span>
-                          <span className="text-rose-400 font-medium">{progressPct}% watched</span>
+                          <span className="truncate">{item.genres[0]}</span>
+                          <span className="text-rose-400 font-medium shrink-0 ml-2">{progressPct}% watched</span>
                         </div>
                       </div>
                     </div>
@@ -145,12 +145,19 @@ export const HomeScreen: React.FC = () => {
             </section>
           )}
 
-          {/* Trending Now (Ranked 1 to 10) */}
+          {/* Top 10 Trending Today (Ranked 1 to 10) */}
           <ContentRow
             title="Top 10 Trending Today"
             subtitle="Most streamed original blockbusters and series"
             items={trendingNow.slice(0, 10)}
             ranked={true}
+          />
+
+          {/* Science & Educational Masterclasses */}
+          <ContentRow
+            title="Science, Physics & Foundation Masterclasses"
+            subtitle="Atomic structure, quantum mechanics & foundation courses"
+            items={filteredCatalog.filter((c) => c.id === 'vela-bohr-001' || c.genres.includes('Documentary'))}
           />
 
           {/* Recommended For You */}

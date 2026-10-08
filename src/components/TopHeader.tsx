@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Bell, Smartphone, Monitor, ShieldAlert, Sparkles, User, Settings2 } from 'lucide-react';
+import { Bell, Smartphone, Monitor, ShieldAlert, Sparkles, User, Settings2, Play } from 'lucide-react';
 
 export const TopHeader: React.FC = () => {
   const {
@@ -12,6 +12,7 @@ export const TopHeader: React.FC = () => {
     setIsMobileFrame,
     setShowAdminDashboard,
     setShowSubscriptionModal,
+    playSampleVideo,
     user
   } = useApp();
 
@@ -47,7 +48,18 @@ export const TopHeader: React.FC = () => {
         </div>
 
         {/* Right Action Icons */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Direct Play Sample Video CTA */}
+          <button
+            onClick={playSampleVideo}
+            title="Play Official 4K Sample Video"
+            aria-label="Play 4K Sample Video"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold shadow-md shadow-rose-950/60 active:scale-95 transition-all cursor-pointer shrink-0"
+          >
+            <Play className="w-3 h-3 fill-white" />
+            <span className="text-[11px] sm:text-xs">Sample Video</span>
+          </button>
+
           {/* Viewport Frame Toggle (Mobile Mockup vs Full Browser) */}
           <button
             onClick={() => setIsMobileFrame(!isMobileFrame)}

@@ -32,9 +32,9 @@ export const ContentRow: React.FC<ContentRowProps> = ({
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="relative my-6 px-4 group/row">
+    <section className="relative my-4 sm:my-5 px-3.5 sm:px-4 group/row">
       {/* Header */}
-      <div className="flex items-baseline justify-between mb-3">
+      <div className="flex items-baseline justify-between mb-2.5">
         <div>
           <h3 className="text-base sm:text-lg font-bold text-zinc-100 tracking-tight">
             {title}
@@ -66,7 +66,7 @@ export const ContentRow: React.FC<ContentRowProps> = ({
       {/* Scrollable list */}
       <div
         ref={rowRef}
-        className="flex items-start gap-3.5 overflow-x-auto scrollbar-none pb-2 pt-1 scroll-smooth"
+        className="flex items-start gap-2.5 sm:gap-3 overflow-x-auto scrollbar-none pb-2 pt-1 scroll-smooth"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {items.map((item, idx) => (
@@ -75,6 +75,11 @@ export const ContentRow: React.FC<ContentRowProps> = ({
             item={item}
             rank={ranked ? idx + 1 : undefined}
             aspect={aspect}
+            className={
+              aspect === 'landscape'
+                ? 'w-52 sm:w-60 md:w-68 shrink-0 min-w-0'
+                : 'w-28 sm:w-32 md:w-36 shrink-0 min-w-0'
+            }
           />
         ))}
       </div>

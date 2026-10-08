@@ -38,8 +38,8 @@ export const AdminDashboard: React.FC = () => {
   const [newType, setNewType] = useState<'movie' | 'series'>('movie');
   const [newPosterUrl, setNewPosterUrl] = useState('');
   const [newBackdropUrl, setNewBackdropUrl] = useState('');
-  const [newVideoUrl, setNewVideoUrl] = useState('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4');
-  const [newTrailerUrl, setNewTrailerUrl] = useState('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4');
+  const [newVideoUrl, setNewVideoUrl] = useState('/videos/sample.mp4');
+  const [newTrailerUrl, setNewTrailerUrl] = useState('/videos/sample.mp4');
   const [newYear, setNewYear] = useState(2026);
   const [newRating, setNewRating] = useState(8.8);
   const [newMaturity, setNewMaturity] = useState<'U' | 'U/A 13+' | '16+' | '18+'>('16+');
@@ -63,8 +63,8 @@ export const AdminDashboard: React.FC = () => {
       type: newType,
       posterUrl: newPosterUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80',
       backdropUrl: newBackdropUrl || newPosterUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80',
-      videoUrl: newVideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-      trailerUrl: newTrailerUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      videoUrl: newVideoUrl || '/videos/sample.mp4',
+      trailerUrl: newTrailerUrl || '/videos/sample.mp4',
       year: Number(newYear),
       rating: Number(newRating),
       maturityRating: newMaturity,
@@ -95,33 +95,34 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="relative w-full max-w-5xl bg-zinc-950 rounded-2xl border border-white/10 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
+      <div className="relative w-full max-w-5xl bg-zinc-950 rounded-2xl border border-white/10 shadow-2xl flex flex-col max-h-[94vh] sm:max-h-[92vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-white">
+        <div className="flex items-center justify-between p-3.5 sm:p-5 border-b border-white/10 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-white shrink-0">
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black text-white tracking-tight font-['Syne',sans-serif]">
+              <h2 className="text-sm sm:text-lg font-black text-white tracking-tight font-['Syne',sans-serif]">
                 Vela Creator & Admin Studio
               </h2>
-              <p className="text-xs text-zinc-400">
-                Manage streaming catalog, metadata, featured carousels & platform analytics
+              <p className="text-[11px] sm:text-xs text-zinc-400 line-clamp-1">
+                Manage streaming catalog, metadata, featured hero placements & analytics
               </p>
             </div>
           </div>
           <button
             onClick={() => setShowAdminDashboard(false)}
-            className="text-zinc-400 hover:text-white"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 text-zinc-400 hover:text-white flex items-center justify-center shrink-0 cursor-pointer transition-colors"
+            aria-label="Close Admin Studio"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Admin Navigation Tabs */}
-        <div className="flex gap-2 px-5 pt-3 border-b border-white/10 text-xs font-semibold">
+        <div className="flex gap-1.5 sm:gap-2 px-3 sm:px-5 pt-2 border-b border-white/10 text-xs font-semibold overflow-x-auto scrollbar-none shrink-0" style={{ scrollbarWidth: 'none' }}>
           {[
             { id: 'catalog', label: 'Catalog Manager', icon: Film },
             { id: 'featured', label: 'Featured Banners', icon: Sparkles },
@@ -134,13 +135,13 @@ export const AdminDashboard: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => setActiveAdminTab(t.id as any)}
-                className={`flex items-center gap-1.5 pb-2.5 border-b-2 transition-colors ${
+                className={`flex items-center gap-1.5 pb-2.5 pt-1 px-1.5 border-b-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   active
                     ? 'border-rose-500 text-rose-500'
                     : 'border-transparent text-zinc-400 hover:text-white'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 h-3.5" />
                 <span>{t.label}</span>
               </button>
             );
@@ -148,74 +149,100 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Tab Body */}
-        <div className="p-5 overflow-y-auto flex-1">
+        <div className="p-3 sm:p-5 overflow-y-auto flex-1 space-y-4">
           {/* TAB 1: CATALOG MANAGER */}
           {activeAdminTab === 'catalog' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+            <div className="space-y-3.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                   <h3 className="text-sm font-bold text-white">All Titles ({catalog.length})</h3>
-                  <p className="text-xs text-zinc-400">Add, edit, or remove movies and TV series</p>
+                  <p className="text-[11px] sm:text-xs text-zinc-400">Add, edit, feature, or remove streaming titles</p>
                 </div>
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow"
+                  className="self-start sm:self-auto px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow active:scale-95 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Publish New Title</span>
                 </button>
               </div>
 
-              {/* Table / List */}
+              {/* Responsive Catalog List (Mobile-first, zero-overlap) */}
               <div className="divide-y divide-white/5 border border-white/10 rounded-xl overflow-hidden bg-zinc-900/60">
                 {catalog.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 p-3 hover:bg-white/5 transition-colors">
-                    <img
-                      src={item.posterUrl}
-                      alt={item.title}
-                      referrerPolicy="no-referrer"
-                      className="w-12 h-16 rounded object-cover bg-zinc-800 shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-xs sm:text-sm font-bold text-white truncate">{item.title}</h4>
-                        <span className="text-[10px] uppercase font-bold text-zinc-400 px-1 bg-white/10 rounded">
-                          {item.type}
-                        </span>
-                        {item.featured && (
-                          <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-1 rounded">
-                            Featured
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] text-zinc-400 mt-0.5">
-                        <span className="flex items-center gap-0.5 text-amber-400">
-                          <Star className="w-3 h-3 fill-amber-400" />
-                          {item.rating}
-                        </span>
-                        <span>·</span>
-                        <span>{item.year}</span>
-                        <span>·</span>
-                        <span>{item.genres.join(', ')}</span>
-                        <span>·</span>
-                        <span>{item.duration}</span>
+                  <div key={item.id} className="p-3 sm:p-3.5 hover:bg-white/5 transition-colors flex flex-col sm:flex-row sm:items-center gap-3">
+                    {/* Media Thumbnail + Metadata Column */}
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <img
+                        src={item.posterUrl}
+                        alt={item.title}
+                        referrerPolicy="no-referrer"
+                        className="w-12 h-16 sm:w-14 sm:h-20 rounded-lg object-cover bg-zinc-800 shrink-0 border border-white/10 shadow-sm"
+                      />
+                      <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch">
+                        <div>
+                          {/* Badges line */}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-[10px] uppercase font-bold text-zinc-300 px-1.5 py-0.5 bg-white/10 rounded">
+                              {item.type}
+                            </span>
+                            {item.featured && (
+                              <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
+                                <Sparkles className="w-2.5 h-2.5" />
+                                Featured
+                              </span>
+                            )}
+                            <span className="text-[10px] text-zinc-400 px-1 rounded border border-zinc-700/80">
+                              {item.maturityRating}
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h4 className="text-xs sm:text-sm font-bold text-white truncate mt-1">
+                            {item.title}
+                          </h4>
+                        </div>
+
+                        {/* Specs & Genres */}
+                        <div className="text-[11px] text-zinc-400 mt-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="flex items-center gap-0.5 text-amber-400 font-semibold">
+                              <Star className="w-3 h-3 fill-amber-400" />
+                              {item.rating}
+                            </span>
+                            <span>·</span>
+                            <span>{item.year}</span>
+                            <span>·</span>
+                            <span className="text-zinc-300 font-medium">{item.duration}</span>
+                          </div>
+                          <p className="text-[10px] text-zinc-500 truncate mt-0.5 max-w-sm sm:max-w-md">
+                            {item.genres.join(', ')}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+
+                    {/* Action Bar (Clean separated row on mobile, right-aligned on desktop) */}
+                    <div className="flex items-center justify-between sm:justify-end gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5 shrink-0">
                       <button
                         onClick={() => toggleFeaturedContent(item.id)}
-                        className={`text-xs px-2.5 py-1 rounded font-semibold transition-colors ${
-                          item.featured ? 'bg-amber-500/20 text-amber-300' : 'bg-white/5 text-zinc-400 hover:text-white'
+                        className={`text-xs px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                          item.featured
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30'
+                            : 'bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700 border border-white/10'
                         }`}
                       >
-                        {item.featured ? 'Featured' : 'Make Featured'}
+                        <Sparkles className="w-3 h-3" />
+                        <span>{item.featured ? 'Featured on Home' : 'Feature on Home'}</span>
                       </button>
+
                       <button
                         onClick={() => deleteContentItem(item.id)}
-                        className="p-1.5 text-zinc-400 hover:text-rose-400 rounded hover:bg-white/5"
+                        className="px-2.5 py-1.5 text-zinc-400 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                         title="Delete title"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="sm:hidden text-[11px]">Delete</span>
                       </button>
                     </div>
                   </div>

@@ -63,13 +63,162 @@ export const INITIAL_SUBSCRIPTION_TIERS: SubscriptionTier[] = [
 
 export const INITIAL_CONTENT: ContentItem[] = [
   {
+    id: 'vela-sample-001',
+    title: 'Vela 4K Showcase (Official Sample Video)',
+    type: 'movie',
+    posterUrl: '/src/assets/images/vela_hero_chronos_deep_1791479592223.jpg',
+    backdropUrl: '/src/assets/images/vela_hero_chronos_deep_1791479592223.jpg',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/sample.mp4',
+    year: 2026,
+    rating: 9.9,
+    maturityRating: 'U',
+    duration: '15m',
+    durationMinutes: 15,
+    genres: ['Action', 'Sci-Fi', 'Documentary'],
+    languages: ['English', 'Spanish', 'Hindi', 'Telugu', 'Japanese'],
+    audioTracks: ['English (Dolby Atmos)', 'Hindi (5.1)', 'Telugu (Original)', 'Spanish (Stereo)'],
+    subtitles: ['English [CC]', 'Spanish', 'Hindi', 'Telugu', 'French', 'German'],
+    director: 'Vela Cinema Engineering Labs',
+    cast: [
+      { name: 'Marcus Sterling', role: 'Chief Engineer', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' },
+      { name: 'Dr. Priya Varma', role: 'Quantum Visualist', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' }
+    ],
+    synopsis: 'Official 4K sample video stream engineered to benchmark full-fidelity streaming playback on mobile and desktop: seamless 10-second scrubbing, high-bitrate frame pacing, dynamic audio-track routing, closed-caption subtitle rendering, playback speed manipulation, and instant background-to-foreground resuming.',
+    tagline: 'Benchmark test stream with full OTT video player controls.',
+    featured: true,
+    trendingRank: 1,
+    isOriginal: true,
+    is4K: true,
+    isHDR: true,
+    createdAt: '2026-03-08'
+  },
+
+  {
+    id: 'vela-bohr-001',
+    title: "Bohr's Atomic Model: Postulates & Quantum Foundations",
+    type: 'series',
+    posterUrl: '/src/assets/images/vela_bohr_poster_1791483789659.jpg',
+    backdropUrl: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/classroom.mp4',
+    year: 2026,
+    rating: 9.8,
+    maturityRating: 'U',
+    duration: '10 Lessons',
+    durationMinutes: 45,
+    genres: ['Documentary', 'Sci-Fi'],
+    languages: ['Telugu', 'English', 'Hindi'],
+    audioTracks: ['Telugu (Original Explanation)', 'English (Standard)', 'Hindi (Dub)'],
+    subtitles: ['English [CC]', 'Telugu', 'Hindi'],
+    director: 'JEE & NEET Foundation Academy',
+    cast: [
+      { name: 'Niels Bohr (Archival)', role: 'Nobel Laureate Physicist', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80' },
+      { name: 'Dr. Priya Varma', role: 'Foundation Chemistry Lead', avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80' },
+      { name: 'Prof. K. Satyanarayana', role: 'JEE Chemistry Faculty', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80' }
+    ],
+    synopsis: "A comprehensive visual masterclass on Niels Bohr's atomic postulates for Class 11 JEE & NEET Foundation Chemistry. Explores stationary orbits, angular momentum quantization (mvr = nh/2π), energy transitions, shell patterns (K, L, M, N), 3D orbital geometries (s, p, d, f), and core exam formulas.",
+    tagline: 'Unlock the quantum architecture of the atom.',
+    featured: true,
+    trendingRank: 5,
+    isOriginal: true,
+    is4K: true,
+    isHDR: true,
+    seasons: [
+      {
+        seasonNumber: 1,
+        title: 'Foundations & Postulates',
+        episodes: [
+          {
+            id: 'bohr-ep-1',
+            episodeNumber: 1,
+            seasonNumber: 1,
+            title: "Slide 1: Bohr's Atomic Model — Postulates",
+            duration: '12m',
+            durationMinutes: 12,
+            synopsis: 'Stationary orbits, angular momentum quantization formula mvr = nh/2π, and energy exchange during transitions (ΔE = E2 - E1 = hν).',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/classroom.mp4'
+          },
+          {
+            id: 'bohr-ep-2',
+            episodeNumber: 2,
+            seasonNumber: 1,
+            title: 'Slide 2: Shell Capacity & Energy Ladder',
+            duration: '10m',
+            durationMinutes: 10,
+            synopsis: 'K, L, M, N shells (n=1 to 4) following the 2n² capacity rule: 2e⁻, 8e⁻, 18e⁻, 32e⁻.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/sample.mp4'
+          },
+          {
+            id: 'bohr-ep-3',
+            episodeNumber: 3,
+            seasonNumber: 1,
+            title: 'Slide 3: Electronic Transitions (Absorption & Emission)',
+            duration: '14m',
+            durationMinutes: 14,
+            synopsis: 'Absorption moves up producing dark lines; emission moves down releasing photon energy ΔE = hν.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/car-detection.mp4'
+          },
+          {
+            id: 'bohr-ep-4',
+            episodeNumber: 4,
+            seasonNumber: 1,
+            title: 'Slide 4: Where the Bohr Model Falls Short',
+            duration: '11m',
+            durationMinutes: 11,
+            synopsis: 'Single-electron limit, Zeeman/Stark spectral splitting, de Broglie duality, and Heisenberg uncertainty violations.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/classroom.mp4'
+          },
+          {
+            id: 'bohr-ep-5',
+            episodeNumber: 5,
+            seasonNumber: 1,
+            title: 'Slide 5: Principal Quantum Number (n)',
+            duration: '15m',
+            durationMinutes: 15,
+            synopsis: 'How n defines the shell radius scaling, total orbitals (n²), and binding energy stability.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/sample.mp4'
+          },
+          {
+            id: 'bohr-ep-6',
+            episodeNumber: 6,
+            seasonNumber: 1,
+            title: 'Slide 6 & 7: Azimuthal Number (l) & 3D Orbital Shapes',
+            duration: '18m',
+            durationMinutes: 18,
+            synopsis: 'Subshells s (spherical), p (dumbbell), d (double dumbbell / cloverleaf), f (complex multi-lobed) 3D geometries.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/car-detection.mp4'
+          },
+          {
+            id: 'bohr-ep-7',
+            episodeNumber: 7,
+            seasonNumber: 1,
+            title: 'Slide 8, 9 & 10: Master Comparison & Revision Roadmap',
+            duration: '16m',
+            durationMinutes: 16,
+            synopsis: 'Formula map: Max e⁻ = 2n², orbitals = n², subshell orbitals = 2l+1, and quick exam review.',
+            thumbnail: '/src/assets/images/vela_bohr_atomic_model_1791483754446.jpg',
+            videoUrl: '/videos/classroom.mp4'
+          }
+        ]
+      }
+    ],
+    createdAt: '2026-03-08'
+  },
+  {
     id: 'vela-001',
     title: 'Chronos: The Quantum Odyssey',
     type: 'movie',
     posterUrl: '/src/assets/images/vela_hero_chronos_deep_1791479592223.jpg',
     backdropUrl: '/src/assets/images/vela_hero_chronos_deep_1791479592223.jpg',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/car-detection.mp4',
     year: 2026,
     rating: 9.3,
     maturityRating: '16+',
@@ -88,7 +237,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     synopsis: 'When a collapsing quantum wormhole breaches the outer rings of Saturn, a daring international crew pilots the experimental starship Odyssey into unmapped space-time to prevent the collapse of Earth\'s orbital gravity grid.',
     tagline: 'Time is the final frontier we must cross.',
     featured: true,
-    trendingRank: 1,
+    trendingRank: 2,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -100,8 +249,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
     backdropUrl: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/sample.mp4',
     year: 2026,
     rating: 9.1,
     maturityRating: '18+',
@@ -120,7 +269,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     synopsis: 'In a rain-drenched megacity where neural memories are currency, an exiled homicide investigator discovers a covert algorithm capable of erasing people from reality itself.',
     tagline: 'Trust no memory. Every reflex is monitored.',
     featured: true,
-    trendingRank: 2,
+    trendingRank: 3,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -138,7 +287,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 52,
             synopsis: 'A high-ranking bio-tech executive is found dead in the Shinjuku sector with wiped neural implants.',
             thumbnail: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4'
+            videoUrl: '/videos/car-detection.mp4'
           },
           {
             id: 'sp-s1-e2',
@@ -149,7 +298,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 48,
             synopsis: 'Jin tracks an anonymous data broker through an underground black-market arcade.',
             thumbnail: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+            videoUrl: '/videos/classroom.mp4'
           },
           {
             id: 'sp-s1-e3',
@@ -160,7 +309,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 55,
             synopsis: 'A syndicate strike team ambushes the safehouse, forcing an impromptu rooftop escape.',
             thumbnail: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+            videoUrl: '/videos/sample.mp4'
           }
         ]
       },
@@ -177,7 +326,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 50,
             synopsis: 'Power grids across Neo Tokyo collapse as the autonomous rogue AI awakens.',
             thumbnail: '/src/assets/images/vela_hero_shadow_protocol_1791479606936.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+            videoUrl: '/videos/car-detection.mp4'
           }
         ]
       }
@@ -190,8 +339,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: '/src/assets/images/vela_hero_elysium_realm_1791479618753.jpg',
     backdropUrl: '/src/assets/images/vela_hero_elysium_realm_1791479618753.jpg',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/sample.mp4',
     year: 2025,
     rating: 9.4,
     maturityRating: '16+',
@@ -210,7 +359,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     synopsis: 'Above the cloud seas, floating citadels guard ancient celestial runes. As the ancestral seals weaken, five noble houses vie for supremacy over the Throne of Dawn.',
     tagline: 'When the sky fractures, only the bold take wing.',
     featured: true,
-    trendingRank: 3,
+    trendingRank: 4,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -228,7 +377,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 61,
             synopsis: 'A golden flash across the northern peaks announces the return of the forgotten celestial dynasty.',
             thumbnail: '/src/assets/images/vela_hero_elysium_realm_1791479618753.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+            videoUrl: '/videos/car-detection.mp4'
           },
           {
             id: 'er-s1-e2',
@@ -239,7 +388,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 56,
             synopsis: 'Cedric must defend his citadel against siege griffins sent by the traitorous High Chancellor.',
             thumbnail: '/src/assets/images/vela_hero_elysium_realm_1791479618753.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+            videoUrl: '/videos/classroom.mp4'
           }
         ]
       }
@@ -252,8 +401,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: '/src/assets/images/vela_hero_formula_velocity_1791479633372.jpg',
     backdropUrl: '/src/assets/images/vela_hero_formula_velocity_1791479633372.jpg',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/car-detection.mp4',
     year: 2026,
     rating: 8.9,
     maturityRating: 'U/A 13+',
@@ -272,7 +421,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     synopsis: 'An inside, high-access documentary following the world’s most relentless hypercar endurance team during a treacherous night race plagued by torrential storms and mechanical peril.',
     tagline: 'When 200 mph meets total darkness.',
     featured: true,
-    trendingRank: 4,
+    trendingRank: 6,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -290,7 +439,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 46,
             synopsis: 'Designing the revolutionary hybrid power unit under strict weight ceilings.',
             thumbnail: '/src/assets/images/vela_hero_formula_velocity_1791479633372.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4'
+            videoUrl: '/videos/classroom.mp4'
           },
           {
             id: 'av-s1-e2',
@@ -301,7 +450,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 42,
             synopsis: 'Aquaplaning on the Mulsanne straight puts Sophia\'s lead at knife\'s edge.',
             thumbnail: '/src/assets/images/vela_hero_formula_velocity_1791479633372.jpg',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+            videoUrl: '/videos/sample.mp4'
           }
         ]
       }
@@ -314,8 +463,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'movie',
     posterUrl: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+    videoUrl: '/videos/car-detection.mp4',
+    trailerUrl: '/videos/classroom.mp4',
     year: 2025,
     rating: 8.8,
     maturityRating: '16+',
@@ -332,7 +481,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'A deaf mathematician working in a decommissioned Cold War bunker decodes a series of shortwave radio frequencies predicting disasters moments before they happen.',
     tagline: 'Some transmissions are never meant to be heard.',
-    trendingRank: 5,
+    trendingRank: 7,
     isOriginal: false,
     is4K: true,
     isHDR: false,
@@ -344,8 +493,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/car-detection.mp4',
     year: 2026,
     rating: 9.5,
     maturityRating: 'U',
@@ -361,7 +510,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'Experience Earth\'s rarest ecosystems captured in breathtaking native 8K HDR, from deep sea hydrothermal vents to high Andean cloud forests.',
     tagline: 'Behold the living pulse of our blue marble.',
-    trendingRank: 6,
+    trendingRank: 8,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -379,7 +528,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 52,
             synopsis: 'Bioluminescent life at 10,000 meters beneath the Mariana surface.',
             thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+            videoUrl: '/videos/classroom.mp4'
           }
         ]
       }
@@ -392,8 +541,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'movie',
     posterUrl: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/car-detection.mp4',
     year: 2025,
     rating: 9.0,
     maturityRating: 'U',
@@ -410,7 +559,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'A curious young red fox discovers a fallen wishing star in the enchanted evergreen grove, embarking on a whimsical skybound voyage to return it to the Great Constellation.',
     tagline: 'Every small wish lights up the darkest sky.',
-    trendingRank: 7,
+    trendingRank: 9,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -422,8 +571,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'movie',
     posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/sample.mp4',
     year: 2026,
     rating: 8.7,
     maturityRating: '16+',
@@ -440,7 +589,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'An elite squad of high-tech art thieves plan the impossible heist: stealing a priceless illuminated medieval manuscript from a vault suspended over the Mediterranean sea.',
     tagline: 'No alarms. No lasers. Just pure audacity.',
-    trendingRank: 8,
+    trendingRank: 10,
     isOriginal: false,
     is4K: true,
     isHDR: false,
@@ -452,8 +601,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'movie',
     posterUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    videoUrl: '/videos/car-detection.mp4',
+    trailerUrl: '/videos/classroom.mp4',
     year: 2025,
     rating: 8.6,
     maturityRating: 'U/A 13+',
@@ -470,7 +619,6 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'Two vintage book collectors cross paths in a rain-swept bookstore along the Seine, discovering letters tucked inside a 1920s journal that mirror their own budding connection.',
     tagline: 'Some words take a century to find their true reader.',
-    trendingRank: 9,
     isOriginal: false,
     is4K: true,
     isHDR: false,
@@ -482,8 +630,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'movie',
     posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    videoUrl: '/videos/sample.mp4',
+    trailerUrl: '/videos/car-detection.mp4',
     year: 2026,
     rating: 8.4,
     maturityRating: '18+',
@@ -500,7 +648,6 @@ export const INITIAL_CONTENT: ContentItem[] = [
     ],
     synopsis: 'A restorative architect renovating an abandoned Victorian sanitarium begins hearing phonograph recordings playing in walls where no electricity has run for seventy years.',
     tagline: 'The walls have memories. And they hunger.',
-    trendingRank: 10,
     isOriginal: true,
     is4K: true,
     isHDR: true,
@@ -512,8 +659,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/sample.mp4',
     year: 2025,
     rating: 8.8,
     maturityRating: '16+',
@@ -547,7 +694,7 @@ export const INITIAL_CONTENT: ContentItem[] = [
             durationMinutes: 44,
             synopsis: 'A coffee-spill incident leads to an accidental 50 million term sheet.',
             thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=80',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+            videoUrl: '/videos/car-detection.mp4'
           }
         ]
       }
@@ -560,8 +707,8 @@ export const INITIAL_CONTENT: ContentItem[] = [
     type: 'series',
     posterUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&auto=format&fit=crop&q=80',
     backdropUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&auto=format&fit=crop&q=80',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-    trailerUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl: '/videos/classroom.mp4',
+    trailerUrl: '/videos/sample.mp4',
     year: 2026,
     rating: 8.9,
     maturityRating: 'U/A 13+',

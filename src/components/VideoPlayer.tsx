@@ -19,15 +19,166 @@ import {
   FastForward,
   AudioLines,
   X,
-  Loader2
+  Loader2,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  Film,
+  Sparkles
 } from 'lucide-react';
 
+const BOHR_SLIDES = [
+  {
+    slideNumber: 1,
+    title: "Bohr's Atomic Model — Postulates",
+    subtitle: "Class 11 · JEE & NEET Foundation Chemistry",
+    bulletPoints: [
+      "Stationary Orbits: Electrons occupy permitted, discrete circular paths and do not radiate energy in stable orbits.",
+      "Angular Momentum Quantization: mvr = nh / (2π)",
+      "Energy Exchange During Transitions: ΔE = E₂ - E₁ = hν"
+    ],
+    formula: "mvr = nh / 2π · ΔE = E₂ - E₁ = hν",
+    tag: "Core Postulates"
+  },
+  {
+    slideNumber: 2,
+    title: "Energy Levels Follow the Shell Pattern",
+    subtitle: "Shell Capacity (2n²) & Energy Ladder",
+    bulletPoints: [
+      "n = 1: K Shell → Max 2 e⁻ (Closest to nucleus, lowest energy, highest stability)",
+      "n = 2: L Shell → Max 8 e⁻ (First excited shell grouping)",
+      "n = 3: M Shell → Max 18 e⁻ (Holds s, p, d subshells)",
+      "n = 4: N Shell → Max 32 e⁻ (Holds s, p, d, f subshells)"
+    ],
+    formula: "Max Capacity = 2n² electrons",
+    tag: "Shell Pattern"
+  },
+  {
+    slideNumber: 3,
+    title: "Electronic Transitions: Absorption & Emission",
+    subtitle: "Absorption Moves Up; Emission Moves Down",
+    bulletPoints: [
+      "Absorption Transition: Lower state (E₁) → Higher state (E₂). Electron absorbs photon (hν), producing dark absorption spectral lines.",
+      "Emission Transition: Higher state (E₂) → Lower state (E₁). Unstable excited electron drops down, releasing energy as radiation (hν), producing bright emission spectral lines.",
+      "Transition Energy Formula: ΔE = E₂ - E₁ = hν = hc / λ"
+    ],
+    formula: "ΔE = E₂ - E₁ = hν = hc / λ",
+    tag: "Transitions"
+  },
+  {
+    slideNumber: 4,
+    title: "Where the Bohr Model Falls Short",
+    subtitle: "Critical Limitations & Quantum Breakpoints",
+    bulletPoints: [
+      "1. Hydrogen-Like Only: Valid strictly for single-electron species (H, He⁺, Li²⁺). Fails for multi-electron atoms due to e⁻-e⁻ repulsion.",
+      "2. Multi-Electron Spectra: Cannot explain fine structure splitting of spectral lines under high-resolution spectrometers.",
+      "3. Zeeman & Stark Effects: Fails to explain spectral line splitting in external magnetic (Zeeman) or electric (Stark) fields.",
+      "4. Ignores de Broglie Duality: Treats electron as classical localized particle, ignoring matter-wave properties.",
+      "5. Violates Heisenberg Uncertainty: Specifying fixed circular orbits with exact r and v directly contradicts Δx·Δp ≥ h / (4π).",
+      "6. No 3D Chemical Bonding: Flat 2D coplanar rings cannot account for directional covalent bonds or 3D molecular geometry."
+    ],
+    formula: "Zeeman Effect (B-field) · Stark Effect (E-field)",
+    tag: "Limitations"
+  },
+  {
+    slideNumber: 5,
+    title: "Principal Quantum Number (n) Defines the Shell",
+    subtitle: "Effective Orbital Size & Average Electron Distance",
+    bulletPoints: [
+      "n = 1 (K Shell): Max 2 e⁻, radius scaling r₁ = 0.529 Å",
+      "n = 2 (L Shell): Max 8 e⁻, radius scaling r₂ = 4 × 0.529 Å",
+      "n = 3 (M Shell): Max 18 e⁻, expanding orbital volume",
+      "n = 4 (N Shell): Max 32 e⁻, outermost principal shell",
+      "Key Rules: Total orbitals in shell = n² | Total electrons = 2n²"
+    ],
+    formula: "r_n = 0.529 × (n² / Z) Å · Orbitals = n²",
+    tag: "Quantum Number n"
+  },
+  {
+    slideNumber: 6,
+    title: "Azimuthal Quantum Number (l) Defines Subshell",
+    subtitle: "Geometric Shape of Electron Cloud",
+    bulletPoints: [
+      "Permissible range: l = 0, 1, 2, ..., (n - 1)",
+      "l = 0: s Subshell (Sharp, Spherical) → 1 orbital, max 2 e⁻",
+      "l = 1: p Subshell (Principal, Dumbbell) → 3 orbitals, max 6 e⁻",
+      "l = 2: d Subshell (Diffuse, Double Dumbbell) → 5 orbitals, max 10 e⁻",
+      "l = 3: f Subshell (Fundamental, Complex) → 7 orbitals, max 14 e⁻"
+    ],
+    formula: "l ∈ [0, n-1] · Orbitals in subshell = 2l + 1",
+    tag: "Quantum Number l"
+  },
+  {
+    slideNumber: 7,
+    title: "3D Probability Geometry: Orbital Shapes",
+    subtitle: "s, p, d, and f Orbital Geometry",
+    bulletPoints: [
+      "s Orbital (l = 0): Spherical, non-directional cloud centered on nucleus.",
+      "p Orbitals (l = 1): Three directional lobes (px, py, pz) separated by a nodal plane.",
+      "d Orbitals (l = 2): Five double-dumbbell / cloverleaf orbitals (dxy, dyz, dxz, dx²-y², dz²).",
+      "f Orbitals (l = 3): Seven multi-lobed complex 3D structures with 3 nodal planes."
+    ],
+    formula: "3D Boundary Surface where P(e⁻) ≥ 90%",
+    tag: "3D Geometry"
+  },
+  {
+    slideNumber: 8,
+    title: "Core Exam Formulas: The Formula Map to Remember",
+    subtitle: "High-yield formulas tested in JEE Main, NEET & Class 11",
+    bulletPoints: [
+      "01. Max Electrons in Shell: N = 2n²",
+      "02. Subshell Quantum Range: l = 0, 1, ..., (n - 1)",
+      "03. Orbitals in Subshell: N_orb = 2l + 1",
+      "04. Max Electrons in Subshell: N_e = 2(2l + 1)",
+      "05. Bohr Frequency Rule: ΔE = E₂ - E₁ = hν",
+      "06. Quantized Angular Momentum: mvr = nh / (2π)"
+    ],
+    formula: "mvr = nh/2π · ΔE = hν · N = 2n² · N_orb = 2l+1",
+    tag: "Formula Map"
+  },
+  {
+    slideNumber: 9,
+    title: "Shells Expand into Subshells: Master Comparison",
+    subtitle: "Detailed structural breakdown from Shell down to Orbitals",
+    bulletPoints: [
+      "n = 1 (K): l=0 → 1s (1 orbital) → 2 e⁻",
+      "n = 2 (L): l=0, 1 → 2s, 2p (1+3=4 orbitals) → 8 e⁻",
+      "n = 3 (M): l=0, 1, 2 → 3s, 3p, 3d (1+3+5=9 orbitals) → 18 e⁻",
+      "n = 4 (N): l=0, 1, 2, 3 → 4s, 4p, 4d, 4f (1+3+5+7=16 orbitals) → 32 e⁻",
+      "Key Rule: Number of subshells in any shell = n"
+    ],
+    formula: "Subshells in shell n = n · Total capacity = 2n²",
+    tag: "Comparison"
+  },
+  {
+    slideNumber: 10,
+    title: "Quick Revision Roadmap: From Shell to Orbital",
+    subtitle: "Complete synthesis from macroscopic models down to 3D wave mechanics",
+    bulletPoints: [
+      "Step 01 Foundation: Bohr Model (mvr = nh/2π, discrete stationary orbits, transitions via ΔE = hν)",
+      "Step 02 Shell Level: Principal 'n' (identifies K, L, M, N; sets distance and 2n² capacity)",
+      "Step 03 Subshell Level: Azimuthal 'l' (s, p, d, f subshells and orbital count 2l+1)",
+      "Step 04 3D Orbital: Spatial Geometry (spherical s, dumbbell p, cloverleaf d, complex f, 2 e⁻ per orbital)"
+    ],
+    formula: "Bohr Model → Shell (n) → Subshell (l) → 3D Orbital",
+    tag: "Revision Roadmap"
+  }
+];
+
 export const VideoPlayer: React.FC = () => {
-  const { activePlayback, stopPlayback, updateWatchProgress, startPlayback, setSelectedContent } = useApp();
+  const { activePlayback, stopPlayback, updateWatchProgress, startPlayback, setSelectedContent, showToast } = useApp();
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const controlsTimeoutRef = useRef<number | null>(null);
+
+  const initialMediaUrl = activePlayback?.episode?.videoUrl || activePlayback?.content?.videoUrl;
+  const [mediaSrc, setMediaSrc] = useState<string>(() => {
+    if (!initialMediaUrl || initialMediaUrl.includes('commondatastorage.googleapis.com')) {
+      return '/videos/sample.mp4';
+    }
+    return initialMediaUrl;
+  });
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
@@ -55,6 +206,34 @@ export const VideoPlayer: React.FC = () => {
   const [selectedQuality, setSelectedQuality] = useState<string>('4K Ultra HD');
 
   const { content, episode, resumeSeconds } = activePlayback || {};
+
+  // Keep mediaSrc in sync when content/episode changes
+  useEffect(() => {
+    const nextUrl = episode?.videoUrl || content?.videoUrl;
+    if (!nextUrl || nextUrl.includes('commondatastorage.googleapis.com')) {
+      setMediaSrc('/videos/sample.mp4');
+    } else {
+      setMediaSrc(nextUrl);
+    }
+  }, [episode, content]);
+
+  const switchMediaSource = (newUrl: string, label?: string) => {
+    setMediaSrc(newUrl);
+    setIsBuffering(false);
+    const v = videoRef.current;
+    if (v) {
+      v.src = newUrl;
+      v.load();
+      v.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          v.muted = true;
+          setIsMuted(true);
+          v.play().catch(() => {});
+        });
+    }
+    if (label) showToast(`Playing ${label}`);
+  };
 
   const formatTime = (secs: number) => {
     if (isNaN(secs) || secs < 0) return '00:00';
@@ -275,13 +454,20 @@ export const VideoPlayer: React.FC = () => {
       {/* HTML5 Native Video Stream */}
       <video
         ref={videoRef}
-        src={currentMediaUrl}
+        src={mediaSrc}
         playsInline
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onWaiting={() => setIsBuffering(true)}
         onPlaying={() => setIsBuffering(false)}
         onCanPlay={() => setIsBuffering(false)}
+        onLoadedData={() => setIsBuffering(false)}
+        onError={() => {
+          setIsBuffering(false);
+          if (mediaSrc !== '/videos/sample.mp4') {
+            switchMediaSource('/videos/sample.mp4', 'Sample Video');
+          }
+        }}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={() => {
           if (videoRef.current) setDuration(videoRef.current.duration);
@@ -413,7 +599,21 @@ export const VideoPlayer: React.FC = () => {
             </div>
 
             {/* Top Right Actions */}
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Quick Sample Switcher Pill */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSettingsModal(true);
+                }}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white text-[11px] font-bold border border-rose-400/40 shadow-lg active:scale-95 transition-all cursor-pointer"
+                title="Switch Sample Stream"
+              >
+                <Film className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">Sample Videos</span>
+              </button>
+
               {/* Lock Controls Button */}
               <button
                 type="button"
@@ -734,6 +934,41 @@ export const VideoPlayer: React.FC = () => {
                     }`}
                   >
                     {s}x
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sample Video Streams Selector */}
+            <div>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-rose-400 block mb-2 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-rose-400" />
+                <span>Sample Video Streams</span>
+              </label>
+              <div className="space-y-1.5">
+                {[
+                  { url: '/videos/sample.mp4', label: 'Sample 1: 4K Ultra HD Showcase', sub: 'High-fidelity test stream' },
+                  { url: '/videos/classroom.mp4', label: 'Sample 2: Academy Lecture', sub: 'Classroom & presentation footage' },
+                  { url: '/videos/car-detection.mp4', label: 'Sample 3: Velocity & Motion', sub: 'Dynamic movement & vehicle track' }
+                ].map((s) => (
+                  <button
+                    key={s.url}
+                    type="button"
+                    onClick={() => {
+                      switchMediaSource(s.url, s.label);
+                      setShowSettingsModal(false);
+                    }}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer ${
+                      mediaSrc === s.url
+                        ? 'bg-rose-600/20 text-rose-300 border border-rose-500/40'
+                        : 'bg-zinc-900/60 text-zinc-300 hover:bg-white/5 border border-transparent'
+                    }`}
+                  >
+                    <div>
+                      <p className="text-xs font-bold">{s.label}</p>
+                      <p className="text-[10px] text-zinc-400">{s.sub}</p>
+                    </div>
+                    {mediaSrc === s.url && <Check className="w-4 h-4 text-rose-500 shrink-0" />}
                   </button>
                 ))}
               </div>
