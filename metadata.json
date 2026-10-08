@@ -1,0 +1,6 @@
+{
+  "name": "Vela Stream - Mobile OTT Cinema",
+  "description": "Next-generation mobile OTT streaming platform with immersive video playback, personalized recommendations, multiple profiles, offline watchlist, and admin studio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
